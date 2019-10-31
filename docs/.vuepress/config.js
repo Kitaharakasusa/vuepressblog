@@ -1,4 +1,5 @@
 const sidebar = require('../utils/autoSidebar')
+console.log(sidebar);
 module.exports = {
     // base: 'phonix',
     title: "Phonix's blog",

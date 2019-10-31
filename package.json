@@ -1,7 +1,8 @@
 {
   "scripts": {
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "deploy": "bash deploy.sh"
   },
   "name": "vuepressblog",
   "version": "1.0.0",

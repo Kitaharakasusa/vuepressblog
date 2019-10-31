@@ -47,7 +47,7 @@ let getSidebar = (title, children = ['']) => {
     title,
     children
   })
-  console.log(children);
+  console.log(title, children);
   return arr
 }
 
@@ -65,9 +65,9 @@ pathArr.forEach(item => {
       title = key
     }
   })
-  sidebar[`/${link}`] = getSidebar(title, children)
+  sidebar[`/blog`+`/${link}`] = getSidebar(title, children)
 })
 
 // console.log('sidebar:', sidebar);
-
+// console.log(sidebar);
 module.exports = sidebar
