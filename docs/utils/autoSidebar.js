@@ -66,5 +66,8 @@ pathArr.forEach(item => {
   })
   sidebar[`/${link}`] = getSidebar(title, children)
 })
-// console.log('sidebar:', sidebar);
-module.exports = sidebar
+console.log('sidebar:', sidebar);
+sidebar.forEach((key, value) => {
+    console.log(value.children);
+})
+// module.exports = sidebar
