@@ -2,7 +2,7 @@ const sidebar = require('../utils/autoSidebar')
 console.log(sidebar);
 module.exports = {
     // base: 'phonix',
-    title: "Phonix's blog",
+    title: "Phoenix's blog",
     description: "share everyday",
     markdown: {
         lineNumbers: true
