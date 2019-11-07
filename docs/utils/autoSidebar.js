@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { sep } = path
-const rootpath = path.resolve(path.dirname(__dirname), 'blog/') // 根目录
+const rootpath = path.resolve(path.dirname(__dirname), 'blog') // 根目录
 
 console.log(rootpath);
 let pathArr = []
@@ -24,7 +24,7 @@ let readDir = folderPath => {
         })
 
         // 排除没有 .md 的目录
-        console.log(tempArr.length);
+        console.log(rootpath);
         if (tempArr[tempArr.length - 1].indexOf('.md') > 0)
           pathArr.push(tempArr)
       }
@@ -34,6 +34,7 @@ let readDir = folderPath => {
         files.forEach(function(file) {
           if (file != '.vuepress') {
             // 排除 .vuepress 目录
+            console.log(folderPath + sep + file);
             readDir(folderPath + sep + file) //递归
           }
         })
