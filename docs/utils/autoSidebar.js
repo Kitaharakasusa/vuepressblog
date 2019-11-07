@@ -3,6 +3,7 @@ const path = require('path')
 const { sep } = path
 const rootpath = path.resolve(path.dirname(__dirname), 'blog/') // 根目录
 
+console.log(rootpath);
 let pathArr = []
 // 读取目录
 let readDir = folderPath => {
@@ -21,7 +22,9 @@ let readDir = folderPath => {
             item.push(tempArr.pop())
           }
         })
+
         // 排除没有 .md 的目录
+        console.log(tempArr.length);
         if (tempArr[tempArr.length - 1].indexOf('.md') > 0)
           pathArr.push(tempArr)
       }
