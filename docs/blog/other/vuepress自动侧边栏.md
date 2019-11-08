@@ -8,7 +8,7 @@
 
 
 
-但其中仍有不清楚的点，我会逐一解释。
+但是他的方法，emmm，有一定的问题，我就参考着他的自己重新写了一个，只支持二级目录哦
 
 ## 步骤
 
@@ -21,79 +21,61 @@
 在docs文件夹中新建utils文件夹，在其中添加autoSidebar.js，代码如下：
 
 ```  javascript
-const fs = require('fs')
-const path = require('path')
-const { sep } = path
-const rootpath = path.resolve(path.dirname(__dirname), 'blog/') // 根目录
+const fs = require('fs');
+const path = require('path');
+const {sep} = path;
+const rootPath = path.resolve(path.dirname(__dirname), 'blog'); // 根目录
 
-let pathArr = []
-// 读取目录
-let readDir = folderPath => {
-  let exists = fs.existsSync(folderPath),
-    stat = fs.statSync(folderPath)
+console.log(rootPath);
 
-  if (exists && stat) {
-    //判断文件、文件目录是否存在
-    if (stat.isFile()) {
-      let tempArr = folderPath.replace(rootpath + sep, '').split(sep) // 去除根目录部分，并分割成数组
-      // 大于 1 可排除根目录下的 'README.md'
-      if (tempArr.length > 1) {
-        pathArr.forEach(item => {
-          // 如果 pathArr 中已经有相同目录则直接 push .md 文件
-          if (item.join(sep).indexOf(tempArr.slice(0, -1).join(sep)) != -1) {
-            item.push(tempArr.pop())
-          }
-        })
-        // 排除没有 .md 的目录
-        if (tempArr[tempArr.length - 1].indexOf('.md') > 0)
-          pathArr.push(tempArr)
-      }
-    } else if (stat.isDirectory()) {
-      let files = fs.readdirSync(folderPath)
-      if (files && files.length > 0) {
-        files.forEach(function(file) {
-          if (file != '.vuepress') {
-            // 排除 .vuepress 目录
-            readDir(folderPath + sep + file) //递归
-          }
-        })
-      }
-    }
-  }
+let pathArr = {};
+
+let readDir = dirPath => {
+    let exists = fs.existsSync(dirPath);
+    let stat = fs.statSync(dirPath);
+    if (exists && stat) {
+        if (stat.isFile()) {
+            let pathWithoutRootArr = dirPath.replace(rootPath + sep, '').split(sep);
+            if (pathWithoutRootArr.length === 2 ) {
+                if (pathArr.hasOwnProperty(pathWithoutRootArr[0])) {
+                    pathArr[pathWithoutRootArr[0]].push(pathWithoutRootArr[1]);
+                }else {
+                    pathArr[pathWithoutRootArr[0]] = new Array(1).fill(pathWithoutRootArr[1]);
+                }
+            }
+        }else if(stat.isDirectory()) {
+            let files = fs.readdirSync(dirPath);
+            if (files && files.length > 0) {
+                files.forEach(function (file) {
+                        readDir(dirPath + sep + file); //递归
+                    })
+                }
+            }
+        }
+};
+
+readDir(rootPath);
+
+let sidebar = {};
+for(let key in pathArr) {
+    let children = [];
+    let link = '';
+    let title = '';
+    console.log(pathArr[key]);
+    let files = pathArr[key];
+    files.forEach(filesname => {
+        if(filesname.indexOf('.md') > 0) {
+            if (filesname === 'README.md') filesname = '';
+            children.push(filesname.replace(/\.md/gi, ''))
+        }
+    });
+    title = key;
+    sidebar[`/blog`+`/${key}/`] = [{title, children}];
 }
-readDir(rootpath)
-// console.log('pathArr:', pathArr);
 
-let getSidebar = (title, children = ['']) => {
-  let arr = []
-  arr.push({
-    title,
-    children
-  })
-  console.log(title, children);
-  return arr
-}
+console.log(sidebar);
 
-let sidebar = {}
-pathArr.forEach(item => {
-  let children = []
-  let link = ''
-  let title = ''
-  item.forEach(key => {
-    if (key.indexOf('.md') > 0) {
-      if (key === 'README.md') key = ''
-      children.push(key.replace(/\.md/gi, ''))
-    } else {
-      link += `${key}/`
-      title = key
-    }
-  })
-  sidebar[`/blog`+`/${link}`] = getSidebar(title, children)
-})
-
-// console.log('sidebar:', sidebar);
-// console.log(sidebar);
-module.exports = sidebar
+module.exports = sidebar;
 ```
 
 我这里跟原作者的不太一样，主要修改了根目录，我把blog作为了我的根目录，因为文档全部在这个文件夹下，之后根据文件夹和内容，会生成一个如下形式的字典，也可以运行一下这个脚本自己看看。

@@ -1,5 +1,6 @@
-const sidebar = require('../utils/autoSidebar')
-console.log(sidebar);
+const sidebar = require('../utils/autoSiderbarPro');
+
+
 module.exports = {
     // base: 'phonix',
     title: "Phoenix's blog",
@@ -36,4 +37,4 @@ module.exports = {
         sidebarDepth:2
     }
     
-}
+};
