@@ -1,8 +1,6 @@
 # call、apply、bind使用和区别
 
-原文转载自
-
-[call、apply、bind使用和区别]: https://juejin.im/post/5a9640335188257a7924d5ef
+原文转载自[call apply bind的区别](https://juejin.im/post/5a9640335188257a7924d5ef)
 
 ## call
 
